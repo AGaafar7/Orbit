@@ -1,0 +1,33 @@
+{
+  "fill" : "system-light",
+  "groups" : [
+    {
+      "blur-material" : null,
+      "layers" : [
+        {
+          "image-name-specializations" : [
+            {
+              "value" : "dark.svg"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "Ellipse white.svg"
+            }
+          ],
+          "name" : "Ellipse white"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : "shared"
+  }
+}
