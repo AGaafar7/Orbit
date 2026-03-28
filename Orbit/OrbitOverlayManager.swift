@@ -1,3 +1,11 @@
+//
+//  OrbitOverlayManager.swift
+//  Orbit
+//
+//  Created by Ahmed Gaafar on 25/03/2026.
+//
+
+
 import Cocoa
 import SwiftUI
 import Combine
@@ -36,7 +44,6 @@ class OrbitOverlayManager: ObservableObject {
             let view = OrbitSwitcherView().environmentObject(self)
             let hostingController = NSHostingController(rootView: view)
             
-            // Get the actual screen dimensions
             let screenRect = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 1920, height: 1080)
             
             let win = OrbitWindow(
@@ -49,10 +56,9 @@ class OrbitOverlayManager: ObservableObject {
             win.isOpaque = false
             win.backgroundColor = .clear
             win.hasShadow = false
-            win.level = .screenSaver // Forces overlay above almost everything including the menu bar
+            win.level = .screenSaver
             win.collectionBehavior = [.canJoinAllSpaces, .ignoresCycle, .stationary]
             
-            // CRITICAL FIX: Force the AppKit view to stretch to the screen bounds
             hostingController.view.frame = NSRect(origin: .zero, size: screenRect.size)
             hostingController.view.autoresizingMask = [.width, .height]
             
@@ -60,7 +66,6 @@ class OrbitOverlayManager: ObservableObject {
             win.isReleasedWhenClosed = false
             overlayWindow = win
         } else {
-            // Update to the exact screen size in case you connected a second monitor
             if let screenRect = NSScreen.main?.frame {
                 overlayWindow?.setFrame(screenRect, display: true)
             }

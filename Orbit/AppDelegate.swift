@@ -5,18 +5,19 @@
 //  Created by Ahmed Gaafar on 25/03/2026.
 //
 
-
-// AppDelegate.swift
 import Cocoa
 import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    var statusItem: NSStatusItem?
+
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Run as an accessory app (no Dock icon, no Menu Bar by default)
         NSApp.setActivationPolicy(.accessory)
+        setupMenuBar()
+
         
-        // Check for Accessibility Permissions
         if checkAccessibility() {
             OrbitInputManager.shared.startMonitoring()
         } else {
@@ -29,8 +30,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return AXIsProcessTrustedWithOptions(options)
     }
     
+    private func setupMenuBar() {
+           statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+           
+           if let button = statusItem?.button {
+               button.image = NSImage(systemSymbolName: "circle.circle", accessibilityDescription: "Orbit")
+           }
+           
+           let menu = NSMenu()
+           
+           let titleItem = NSMenuItem(title: "Orbit is Active", action: nil, keyEquivalent: "")
+           titleItem.isEnabled = false
+           menu.addItem(titleItem)
+           
+           menu.addItem(NSMenuItem.separator())
+           
+           let quitItem = NSMenuItem(title: "Quit Orbit", action: #selector(quitApp), keyEquivalent: "q")
+           menu.addItem(quitItem)
+           
+           statusItem?.menu = menu
+       }
+    
+    @objc private func quitApp() {
+        NSApp.terminate(nil)
+    }
+    
     private func promptForAccessibility() {
-            // Temporarily make it a regular app so the alert is forced to the front
             NSApp.setActivationPolicy(.regular)
             
             DispatchQueue.main.async {
@@ -40,7 +65,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 alert.addButton(withTitle: "Open System Settings")
                 alert.addButton(withTitle: "Quit")
                 
-                // Force the app to the front
                 NSApp.activate(ignoringOtherApps: true)
                 
                 let response = alert.runModal()
@@ -49,7 +73,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         NSWorkspace.shared.open(url)
                     }
                 }
-                // Terminate so the user can relaunch after granting permission
                 NSApp.terminate(nil)
             }
         }

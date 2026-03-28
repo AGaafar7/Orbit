@@ -5,8 +5,6 @@
 //  Created by Ahmed Gaafar on 25/03/2026.
 //
 
-
-// OrbitAppFetcher.swift
 import Cocoa
 
 struct OrbitAppInfo: Identifiable, Equatable {
@@ -28,8 +26,6 @@ class OrbitAppFetcher {
             $0.activationPolicy == .regular && $0.bundleIdentifier != myBundleId
         }
         
-        // Keep order consistent (Standard macOS Alt-Tab sorts MRU, but lacking public MRU API, 
-        // we'll sort alphabetically so the cycle is predictable)
         let sortedApps = apps.sorted { ($0.localizedName ?? "") < ($1.localizedName ?? "") }
         
         return sortedApps.compactMap { app in
